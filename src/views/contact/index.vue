@@ -4,14 +4,14 @@
       <el-input @keyup.enter.native="filterMajor"
                 style="width: 200px;"
                 class="filter-item"
-                :placeholder="姓名"
+                :placeholder="name"
                 v-model="major">
       </el-input>
       <el-select clearable
                  style="width: 150px"
                  class="filter-item"
                  v-model="tableData.major"
-                 :placeholder="专业">
+                 :placeholder="major">
         <el-option v-for="item in major"
                    :key="item"
                    :label="item"
@@ -125,7 +125,15 @@ export default {
   },
   data() {
     return {
-      tableData: [],
+      date: null,
+      name: null,
+      major: null,
+      class: null,
+      QQ: null,
+      address: null,
+      grade: null,
+      tableData: [
+      ],
       downloadLoading: true
     }
   },
@@ -151,6 +159,10 @@ export default {
     },
     filterMajor(value, row) {
       return row.major === value
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
 }
