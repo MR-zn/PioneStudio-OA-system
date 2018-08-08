@@ -7,8 +7,15 @@
                 :placeholder="姓名"
                 v-model="major">
       </el-input>
-      <el-select clearable style="width: 150px" class="filter-item" v-model="tableData.major" :placeholder="专业">
-        <el-option v-for="item in major" :key="item" :label="item" :value="item">
+      <el-select clearable
+                 style="width: 150px"
+                 class="filter-item"
+                 v-model="tableData.major"
+                 :placeholder="专业">
+        <el-option v-for="item in major"
+                   :key="item"
+                   :label="item"
+                   :value="item">
         </el-option>
       </el-select>
       <!-- <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.type" :placeholder="null">
@@ -23,22 +30,20 @@
                  type="primary"
                  v-waves
                  icon="el-icon-search"
-                 @click="handleFilter">{{null}}</el-button>
+                 @click="handleFilter">{{'搜索'}}</el-button>
       <el-button class="filter-item"
                  style="margin-left: 10px;"
-                 @click="handleCreate"
                  type="primary"
-                 icon="el-icon-edit">{{null}}</el-button>
+                 icon="el-icon-edit">{{'添加'}}</el-button>
       <el-button class="filter-item"
                  type="primary"
-                 :loading="downloadLoading"
                  v-waves
-                 icon="el-icon-download"
-                 @click="handleDownload">{{null}}</el-button>
-      <el-checkbox class="filter-item"
+                 :loading="downloadLoading"
+                 icon="el-icon-download">{{'导出'}}</el-button>
+      <!-- <el-checkbox class="filter-item"
                    style='margin-left:15px;'
                    @change='tableKey=tableKey+1'
-                   v-model="showReviewer">{{null}}</el-checkbox>
+                   v-model="showReviewer">{{'审核人'}}</el-checkbox> -->
     </div>
     <el-table :data="tableData"
               style="width: 100%">
@@ -55,22 +60,37 @@
       <el-table-column prop="name"
                        label="姓名"
                        width="180">
+        <template slot-scope="scope">
+          {{tableData[scope.$index]['name']}}
+        </template>
       </el-table-column>
       <el-table-column prop="major"
                        label="专业"
                        :filters="[{text: '电子商务', value: '电子商务'},{text: '软件技术', value: '软件技术'},{text: '数字媒体', value: '数字媒体'}
                        ,{text: '网络技术', value: '网络技术'},{text: '软件与信息服务', value: '软件与信息服务'}]"
                        :filter-method="filterMajor">
+        <template slot-scope="scope">
+          {{tableData[scope.$index]['major']}}
+        </template>
       </el-table-column>
       <el-table-column prop="class"
                        label="班级">
+        <template slot-scope="scope">
+          {{tableData[scope.$index]['class']}}
+        </template>
       </el-table-column>
       <el-table-column prop="QQ"
                        label="QQ">
+        <template slot-scope="scope">
+          {{tableData[scope.$index]['QQ']}}
+        </template>
       </el-table-column>
       <el-table-column prop="address"
                        label="地址"
                        :formatter="formatter">
+        <template slot-scope="scope">
+          {{tableData[scope.$index]['address']}}
+        </template>
       </el-table-column>
       <el-table-column prop="grade"
                        label="年级"
@@ -88,15 +108,25 @@
 
 <script>
 import res from './res.js'
-import waves from '@/directive/waves' // 水波纹指令
+import waves from '../../directive/waves' // 水波纹指令
+// import request from '../../utils/request'
+// export function fetchList(query) {
+//   return request({
+//     url: './res.js',
+//     method: 'get',
+//     params: query
+//   })
+// }
+// console.log(fetchList())
 export default {
-  name: '拓荒工作室通讯录',
+  name: 'Contact',
   directives: {
     waves
   },
   data() {
     return {
-      tableData: []
+      tableData: [],
+      downloadLoading: true
     }
   },
   created: function() {
