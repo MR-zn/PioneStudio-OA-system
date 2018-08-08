@@ -38,6 +38,71 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/work',
+    component: Layout,
+    redirct: './work/absence',
+    name: '工作',
+    meta: {
+      title: '工作',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: '/work/absence',
+        name: '请假',
+        component: () =>
+            import('@/views/work/absence/index'),
+        meta: {
+          title: '请假',
+          icon: 'example'
+        }
+      }, {
+        path: '/work/metting',
+        name: '会议',
+        component: () =>
+            import('@/views/work/metting/index'),
+        meta: {
+          title: '会议',
+          icon: 'example'
+        }
+      }, {
+        path: '/work/notice',
+        name: '通知',
+        component: () =>
+            import('@/views/work/notice/index'),
+        meta: {
+          title: '通知',
+          icon: 'example'
+        }
+      }, {
+        path: '/work/task',
+        name: '任务',
+        component: () =>
+            import('@/views/work/task/index'),
+        meta: {
+          title: '任务',
+          icon: 'example'
+        }
+      }
+    ]
+  },
+  // 通讯录
+  {
+    path: '/contact',
+    component: Layout,
+    children: [{
+      path: '/contact',
+      name: '通讯录',
+      component: () =>
+      import('@/views/contact/index'),
+      meta: {
+        title: '通讯录',
+        icon: 'example'
+      }
+    }]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
