@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="filterMajor"
+      <el-input @keyup.enter.native="filterName"
                 style="width: 200px;"
                 class="filter-item"
                 :placeholder="name"
-                v-model="major">
+                v-model="name">
       </el-input>
       <el-select clearable
                  style="width: 150px"
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { fetchList } from '@/api/article'
 import res from './res.js'
 import waves from '../../directive/waves' // 水波纹指令
 // import request from '../../utils/request'
@@ -125,13 +126,14 @@ export default {
   },
   data() {
     return {
-      date: null,
-      name: null,
-      major: null,
-      class: null,
-      QQ: null,
-      address: null,
-      grade: null,
+      date: undefined,
+      name: undefined,
+      major: undefined,
+      class: undefined,
+      QQ: undefined,
+      address: undefined,
+      grade: undefined,
+      page: undefined,
       tableData: [
       ],
       downloadLoading: true
@@ -147,6 +149,19 @@ export default {
     }
   },
   methods: {
+    // 搜索方法
+    getList() {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
     formatter(row, column) {
       return row.address
     },
@@ -160,8 +175,11 @@ export default {
     filterMajor(value, row) {
       return row.major === value
     },
+    filterName(value, row) {
+      return row.name === value
+    },
     handleFilter() {
-      this.listQuery.page = 1
+      // this.tableData.page = 1
       this.getList()
     }
   }
