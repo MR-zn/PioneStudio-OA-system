@@ -136,6 +136,7 @@ export default {
       page: undefined,
       tableData: [
       ],
+      listLoading: false,
       downloadLoading: true
     }
   },
