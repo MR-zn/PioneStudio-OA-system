@@ -2,10 +2,10 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input @keyup.enter.native="filterName"
+                placeholder="搜索名字"
                 style="width: 200px;"
                 class="filter-item"
-                :placeholder="name"
-                v-model="name">
+                v-model="search">
       </el-input>
       <el-select clearable
                  style="width: 150px"
@@ -29,8 +29,7 @@
       <el-button class="filter-item"
                  type="primary"
                  v-waves
-                 icon="el-icon-search"
-                 @click="handleFilter">{{'搜索'}}</el-button>
+                 icon="el-icon-search">{{'搜索'}}</el-button>
       <el-button class="filter-item"
                  style="margin-left: 10px;"
                  type="primary"
@@ -45,11 +44,10 @@
                    @change='tableKey=tableKey+1'
                    v-model="showReviewer">{{'审核人'}}</el-checkbox> -->
     </div>
-    <el-table :data="tableData"
+    <el-table :data="tables"
               style="width: 100%">
       <el-table-column prop="date"
                        label="日期"
-                       sortable
                        width="180"
                        :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
                        :filter-method="filterHandler">
@@ -103,6 +101,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="block">
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[100, 200, 300, 400]"
+                     :page-size="100"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="400">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -134,6 +142,9 @@ export default {
       address: undefined,
       grade: undefined,
       page: undefined,
+      hidden: false,
+      search: '',
+      currentPage: 1,
       tableData: [
       ],
       listLoading: false,
@@ -179,9 +190,24 @@ export default {
     filterName(value, row) {
       return row.name === value
     },
-    handleFilter() {
-      // this.tableData.page = 1
-      this.getList()
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+    }
+  },
+  computed: {
+    tables: function() {
+      var search = this.search
+      if (search) {
+        return this.tableData.filter(function(dataNews) {
+          return Object.keys(dataNews).some(function(key) {
+            return String(dataNews[key]).toLowerCase().indexOf(search) > -1
+          })
+        })
+      }
+      return this.tableData
     }
   }
 }
